@@ -1,0 +1,19 @@
+<div class="tabs-header">
+  <tabset #staticTabs>
+    <tab class="container" heading="General" (select)="currentTab = 'general'">
+      <vc-project-detail-general *ngIf="currentTab === 'general'" [project]="management.project[0]"></vc-project-detail-general>
+    </tab>
+    <tab class="container" heading="Versions" (select)="currentTab = 'versions'">
+      <vc-project-detail-versions *ngIf="currentTab === 'versions'" [versions]="management.versions"></vc-project-detail-versions>
+    </tab>
+    <tab class="container" heading="Tasks" (select)="currentTab = 'tasks'">
+      <vc-project-detail-tasks *ngIf="currentTab === 'tasks'" [tasks]="management.tasks" [project]="management.project[0]"></vc-project-detail-tasks>
+    </tab>
+    <tab class="container" heading="Members" (select)="currentTab = 'members'">
+      <vc-project-detail-members *ngIf="currentTab === 'members'" [members]="management.members" [roles]="management.roles">
+    </vc-project-detail-members></tab>
+    <tab class="container" heading="Roles" (select)="currentTab = 'roles'">
+      <vc-project-detail-roles *ngIf="currentTab === 'roles'" [roles]="management.roles" [powers]="management.powers"></vc-project-detail-roles>
+    </tab>
+  </tabset>
+</div>

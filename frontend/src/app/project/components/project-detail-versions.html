@@ -1,0 +1,118 @@
+<div class="page-header">
+    <h3><i class="fa fa-folder-open"></i> Version Control
+        <small></small>
+    </h3>
+</div>
+<div class="row" id="project-log">
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-body filter-body">
+                <div class="row filter-row">
+                    <div class="col-sm-12">
+                        <ul class="list-inline">
+                            <li *ngFor="let item of filterGroup.version.list">
+                                <button class="btn btn-filter" type="button" (click)="selectVersionFilter(item.type)" [class.activated]="item.type === filterGroup.version.current">{{item.name}}</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <ul class="list-block">
+                    <li>
+                        <button type="button" class="btn btn-default btn-block btn-xs" style="margin-bottom: 10px;" (click)="setModel()">New Version</button>
+                    </li>
+                    <li *ngFor="let item of versions.viewData | reverse;" (click)="setModel(item.ID)">
+                        <a href="javascript:;" [class.active]="isCurrent(item.ID)">
+                            <span>{{item.V_MAJOR + '.' + item.V_MINOR + '.' + item.V_PATCH}}</span>
+                            <span class="label" [class.label-success]="item.STATUS===0" [class.label-primary]="item.STATUS===1">{{item.STATUS === 0 ? 'Open' : 'Released'}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{selectedVersion}} ({{filterGroup.version.current ? 'Production' : 'Development'}})</div>
+            <div class="panel-body">
+                <form [formGroup]="form" novalidate (ngSubmit)="doSubmit()">
+                    <input type="hidden" formControlName="ID" class="form-control" readonly>
+                    <div class="form-group" *ngIf="!isReadOnly">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Majoy</label>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" (click)="decrease('major')" type="button">-</button>
+                                    </span>
+                                    <input type="number" class="form-control" formControlName="major">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" (click)="increase('major')" type="button">+</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Minor</label>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" (click)="decrease('minor')" type="button">-</button>
+                                    </span>
+                                    <input type="number" class="form-control" formControlName="minor">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" (click)="increase('minor')" type="button">+</button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label>Patch</label>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" (click)="decrease('patch')" type="button">-</button>
+                                    </span>
+                                    <input type="number" class="form-control" formControlName="patch">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" (click)="increase('patch')" type="button">+</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="formErrors.major" class="alert alert-danger">
+                        {{ formErrors.major }}
+                    </div>
+                    <div *ngIf="formErrors.minor" class="alert alert-danger">
+                        {{ formErrors.minor }}
+                    </div>
+                    <div *ngIf="formErrors.patch" class="alert alert-danger">
+                        {{ formErrors.patch }}
+                    </div>
+                    <div class="form-group">
+                        <label>Repository Code</label>
+                        <input type="text" class="form-control" [readOnly]="isReadOnly" formControlName="repoCode">
+                        <div *ngIf="formErrors.repoCode" class="alert alert-danger">
+                            {{ formErrors.repoCode }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Update Logs</label>
+                        <project-version-log [isReadOnly]="isReadOnly" [group]="form.get('log')"></project-version-log>
+                    </div>
+                    <div class="form-group" *ngIf="!selectedV || selectedV.STATUS===0">
+                        <label>Submit as release</label>
+                        <div class="ui checkbox">
+                            <input type="checkbox" formControlName="release" tabindex="0" class="hidden">
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="!isReadOnly">
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-success btn-block" [disabled]="!form.valid">Submit</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="reset" class="btn btn-default btn-block">Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="tabs-header" [formGroup]="group">
+  <tabset #staticTabs>
+    <tab heading="General">
+        <quill-editor [readOnly]="isReadOnly" [maxLength]="2000" placeholder="General" formControlName="general" [modules]="modules"></quill-editor>
+    </tab>
+    <tab heading="Features">
+        <quill-editor [readOnly]="isReadOnly" [maxLength]="2000" placeholder="Features" formControlName="feature" [modules]="modules"></quill-editor>
+    </tab>
+    <tab heading="Fixes">
+        <quill-editor [readOnly]="isReadOnly" [maxLength]="2000" placeholder="Bug fixes" formControlName="bug" [modules]="modules"></quill-editor>
+    </tab>
+  </tabset>
+</div>

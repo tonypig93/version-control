@@ -1,0 +1,36 @@
+<div class="page-header">
+    <h3><i class="fa fa-address-book"></i> Total members: {{members.viewData.length}}
+        <small></small>
+    </h3>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading pull-side">
+        <span>Members List</span>
+        <div>
+            <button type="button" (click)="showModal=true" class="btn btn-default btn-xs">Add <i class="fa fa-plus-circle"></i></button>
+            <button type="button" (click)="deleteUser()" class="btn btn-default btn-xs" [disabled]="!selected">Delete <i class="fa fa-trash-o"></i></button>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6" *ngFor="let item of members.viewData; trackBy: trackByID">
+                <div class="thumbnail" (click)="mark(item.ID)" [class.active]="isMarked(item.ID)">
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <img class="media-object" width="64" height="64" src="https://help.github.com/assets/images/site/be-social.gif"
+                                alt="">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{item.USER_NAME}}</h4>
+                            <p>{{item.ROLE_NAME}}</p>
+                        </div>
+                    </div>
+                    <div class="chart">
+                        Here is going to be a chart.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<project-add-user-modal [isModalShown]="showModal" (refreshList)="refresh($event)" [members]="members" [roles]="roles" (modalChange)="showModal=false"></project-add-user-modal>

@@ -1,0 +1,51 @@
+.version-new {
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    text-decoration: none;
+    display: inline-block;
+
+}
+.input-group button.btn {
+    height: 40px;
+}
+.nav-tabs {
+    display: flex;
+    justify-content: space-between;
+}
+ul.list-block {
+    list-style: none;
+    padding: 0;
+}
+ul.list-block li {
+}
+ul.list-block > li > a {
+    display: flex;
+    text-decoration: none;
+    justify-content: space-between;
+    padding: 2px 2px 2px 5px;;
+    border-bottom: 1px solid #ddd;
+    border-left: 3px solid transparent;
+}
+ul.list-block > li > a:hover {
+    border-left: 3px solid #e36209;
+}
+ul.list-block > li > a.active {
+    border-left: 3px solid #e36209;
+}
+ul.list-inline {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+ul.list-block > li > a .label {
+    line-height: 1.2;
+}
+.ui.checkbox .box:before, .ui.checkbox label:before {
+    top: 5px;
+}
+.checkbox {
+    margin: 0;
+}
+.ui.checkbox {
+    line-height: 26px;
+}

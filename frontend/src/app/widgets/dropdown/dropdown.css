@@ -1,0 +1,12 @@
+.btn-toggle {
+    height: 50px; 
+    background-color: transparent;
+    border-color: transparent
+}
+.btn-toggle:hover {
+    color: #ddd;
+}
+.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+    background-color: transparent; 
+    border-color: transparent;
+}

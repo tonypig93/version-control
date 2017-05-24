@@ -1,0 +1,12 @@
+<div dropdown>
+  <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle {{btnClass}}">
+    {{title}} <span class="caret"></span>
+  </button>
+  <ul *dropdownMenu class="dropdown-menu" role="menu">
+    <ng-template ngFor let-item [ngForOf]="actions">
+        <li role="menuitem"  (click)="item.fn()"><a class="dropdown-item" href="javascript:;">{{item.name}}</a></li>
+        <li class="divider dropdown-divider"></li>
+    </ng-template>
+    <li role="menuitem"><a href="javascript:;">v 0.1.0 @tonypig93</a></li>
+  </ul>
+</div>

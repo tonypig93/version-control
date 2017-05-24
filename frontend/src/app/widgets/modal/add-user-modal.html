@@ -1,0 +1,52 @@
+<div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Add a user</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="userForm" novalidate (ngSubmit)="doSubmit(userForm)">
+            <div class="form-group">
+                <label>User Name</label>
+                <input type="text" class="form-control" formControlName="userName">
+                <div *ngIf="formErrors.userName" class="alert alert-danger">
+                    {{ formErrors.userName }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" class="form-control" formControlName="email">
+                <div *ngIf="formErrors.email" class="alert alert-danger">
+                    {{ formErrors.email }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" formControlName="password">
+                <div *ngIf="formErrors.password" class="alert alert-danger">
+                    {{ formErrors.password }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Confrim password</label>
+                <input type="password" class="form-control" formControlName="password2">
+                <div *ngIf="formErrors.password2" class="alert alert-danger">
+                    {{ formErrors.password2 }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <button type="submit" class="btn btn-success btn-block" [disabled]="!userForm.valid">Add</button>
+                </div>
+                <div class="col-sm-6">
+                    <button type="reset" class="btn btn-default btn-block">Reset</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

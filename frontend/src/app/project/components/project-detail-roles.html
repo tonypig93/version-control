@@ -1,0 +1,38 @@
+<div class="page-header">
+    <h3><i class="fa fa-suitcase"></i> Manage roles in the project
+        <small></small>
+    </h3>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading pull-side">
+        <span>Roles List</span>
+        <div>
+            <button type="button" (click)="showModal=true" class="btn btn-default btn-xs">Add <i class="fa fa-plus-circle"></i></button>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-12" *ngFor="let item of roles.viewData; trackBy: trackByID">
+                <div class="panel panel-default">
+                    <div class="panel-body role-item">
+                        <p>Role Name: <b>{{ item.ROLE_NAME }}</b></p>
+                        <p>Powers: </p>
+                        <div class="row">
+                            <div class="col-sm-4" *ngFor="let item2 of item.powerList">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" [(ngModel)]="item2.checked" tabindex="0" class="hidden">
+                                    <label>{{ item2.POWER_NAME }}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="role-fn">
+                            <button type="button" (click)="deleteRole(item.ID)" class="btn btn-default btn-xs">Delete <i class="fa fa-trash-o"></i></button>
+                            <button type="button" (click)="updateRole(item)" class="btn btn-default btn-xs">Save <i class="fa fa-save"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<project-add-role-modal [isModalShown]="showModal" (refreshList)="refresh($event)" [powerList]="powers" (modalChange)="showModal=false"></project-add-role-modal>

@@ -1,0 +1,11 @@
+.login{
+    padding: 250px 0 120px 0;
+    width: 350px;
+}
+.login-main{
+    display: flex;
+    justify-content: center;
+    background-image: url('../../../assets/image/home-code.svg');
+    background-size: 100% auto;
+    background-position: center -230px, 0 0;
+}

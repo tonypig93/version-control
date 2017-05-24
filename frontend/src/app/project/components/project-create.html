@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2" style="margin-top: 20px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">Create a new project</div>
+            <div class="panel-body">
+                <form [formGroup]="projectForm" novalidate (ngSubmit)="doSubmit()">
+                    <div class="form-group">
+                        <label>Project Name</label>
+                        <input type="text" class="form-control" formControlName="projectName">
+                        <div *ngIf="formErrors.projectName" class="alert alert-danger">
+                            {{ formErrors.projectName }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="4" formControlName="description"></textarea>
+                        <div *ngIf="formErrors.description" class="alert alert-danger">
+                            {{ formErrors.description }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Visibility</label>
+                        <label class="checkbox-inline">
+                            <input type="radio" formControlName="visibility" value="1" checked> Public
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" formControlName="visibility" value="2"> Private
+                        </label>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-primary btn-block" [disabled]="!projectForm.valid">Create</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="reset" class="btn btn-default btn-block">Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

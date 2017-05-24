@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4 group-list">
+            <div class="panel panel-default">
+                <div class="panel-heading">Groups</div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        <a [routerLink]="['/group', item.ID]" [class.activated]="isCurrent(item.ID)" class="list-group-item" *ngFor="let item of groupList">
+                            <h4 class="list-group-item-heading">
+                                {{item.GROUP_NAME}} ({{item.MEM_NUMBER}})
+                            </h4>
+                            <p class="list-group-item-text">
+                                {{item.DESCRIPTION}}
+                            </p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-sm-8">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

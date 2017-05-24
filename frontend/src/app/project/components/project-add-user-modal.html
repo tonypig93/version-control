@@ -1,0 +1,41 @@
+<div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
+    tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="addForm" novalidate (ngSubmit)="doSubmit()">
+                    <div class="form-group">
+                        <label>Select A Member</label>
+                        <div *ngIf="userList.length > 0">
+                            <ng-select [multiple]="false" [items]="userList" [disabled]="false" (data)="refreshValue($event)" (selected)="selected($event, 'user')"
+                                (removed)="removed($event, 'user')" placeholder="No user selected" showSearchInputInDropdown>
+                            </ng-select>
+                        </div>
+                        <div *ngIf="formErrors.user" class="alert alert-danger">
+                            {{ formErrors.user }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Select A Role</label>
+                        <div *ngIf="roleList.length > 0">
+                            <ng-select [multiple]="false" [items]="roleList" [disabled]="false" (data)="refreshValue($event)" (selected)="selected($event, 'role')"
+                                (removed)="removed($event, 'role')" placeholder="No role selected" showSearchInputInDropdown>
+                            </ng-select>
+                        </div>
+                        <div *ngIf="formErrors.role" class="alert alert-danger">
+                            {{ formErrors.role }}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Add</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

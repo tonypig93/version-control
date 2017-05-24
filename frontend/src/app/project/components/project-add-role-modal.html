@@ -1,0 +1,34 @@
+<div *ngIf="isModalShown" [config]="{ show: true }" (onShown)="onShown()" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
+    tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Create a role</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <form novalidate (ngSubmit)="doSubmit()">
+                    <div class="form-group">
+                        <label>Role Name</label>
+                        <input type="text" name="roleName" class="form-control" [(ngModel)]="roleInfo.roleName">
+                    </div>
+                    <div class="form-group">
+                        <label>Set Powers</label>
+                        <div class="row">
+                            <div class="col-sm-4" *ngFor="let item of roleInfo.powerList">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="{{'power' + item.ID}}" [(ngModel)]="item.checked" tabindex="0" class="hidden">
+                                    <label>{{ item.POWER_NAME }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Create</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

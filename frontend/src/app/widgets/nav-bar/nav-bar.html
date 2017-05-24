@@ -1,0 +1,21 @@
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" [routerLink]="['/']">Shuttle</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <!--<li><a [routerLink]="['/project/control', {outlets: {'detail': ['detail']}}]">Project</a></li>-->
+                <li><a [routerLink]="['/group']">Group</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <ul class="nav navbar-nav">
+                <li>
+                    <!--<a href="javascript:;">{{userInfo.userName}} <i class="fa fa-caret-down"></i></a>-->
+                    <dropdown [title]="userInfo.userName" [btnClass]="'btn-toggle'" [actions]="actions"></dropdown>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

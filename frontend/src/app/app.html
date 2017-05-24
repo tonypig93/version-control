@@ -1,0 +1,8 @@
+<nav-bar *ngIf="isLoginPage()"></nav-bar>
+<router-outlet></router-outlet>
+<info-modal></info-modal>
+<footer class="container">
+<span class="mr5">© {{thisYear}} Tony Zhu.</span>
+<a href="javascript:;" class="mr5" (click)="showContact()"> Contact</a>
+<a href="javascript:;" (click)="showAbout()"> About</a>
+</footer>

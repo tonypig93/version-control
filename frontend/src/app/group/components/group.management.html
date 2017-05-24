@@ -1,0 +1,93 @@
+<div class="panel panel-default">
+        <div class="panel-heading pull-side">
+            <span>Group Management <b>-Projects</b></span>
+            <div>
+                <button type="button" [routerLink]="['/group', groupId, 'project', 'create']" class="btn btn-default btn-xs">Create <i class="fa fa-plus-circle"></i></button>
+            </div>
+        </div>
+    <div class="panel-body filter-body">
+        <div class="manage-content">
+            <div class="row filter-row">
+                <div class="col-sm-6">
+                    <ul class="list-inline">
+                        <li *ngFor="let item of filterGroup.project.list">
+                            <button class="btn btn-filter" type="button" (click)="selectProjectFilter(item.type)" [class.activated]="item.type === filterGroup.project.current">{{item.name}}</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-sm-offset-2">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input type="text" class="form-control input-sm" [formControl]="filterGroup.project.searchText" placeholder="Search for project">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6" *ngFor="let item of management.projects.viewData; trackBy: trackByID">
+                    <div class="panel panel-default project-card" [routerLink]="['/group', groupId, 'project', item.ID]">
+                        <div class="panel-body">
+                            <div class="visible fa" [class.fa-eye-slash]="item.VISIBILITY === 2"></div>
+                            <p class="text-center"><b>{{item.PRJ_NAME}}</b></p>
+                            <hr>
+                            <p class="pull-side" style="margin-bottom: 5px;">
+                                <span>Dev: <label class="label label-success">{{item.CURRENT_D_VERSION || 'no release'}}</label></span>
+                                <span>Prod: <label class="label label-primary">{{item.CURRENT_VERSION || 'no release'}}</label></span>
+                            </p>
+                            <p>Progress: {{item.progress[0] + '/' + item.progress[1]}}</p>
+                            <div class="progress progress-striped active">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                    [ngStyle]="{'width': (item.progress[1] ? ((item.progress[0] / item.progress[1]) * 100) : 100) + '%'}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading pull-side">
+        <span>Group Management <b>-Members</b></span>
+        <div>
+            <button type="button" (click)="showModal=true" class="btn btn-default btn-xs">Add <i class="fa fa-plus-circle"></i></button>
+            <button type="button" (click)="deleteUser()" class="btn btn-default btn-xs" [disabled]="!selected">Delete <i class="fa fa-trash-o"></i></button>
+        </div>
+    </div>
+    <div class="panel-body filter-body">
+        <div class="manage-content">
+            <div class="row filter-row">
+                <div class="col-sm-6">
+                    <ul class="list-inline">
+                        <li *ngFor="let item of filterGroup.user.list">
+                            <button class="btn btn-filter" type="button" (click)="selectUserFilter(item.type)" [class.activated]="item.type === filterGroup.user.current">{{item.name}}</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-sm-offset-2">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input type="text" class="form-control input-sm" [formControl]="filterGroup.user.searchText" placeholder="Search for user">
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                    <th>ID</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of management.users.viewData;trackBy:trackByID" (click)="mark(item.ID)" [class.active]="isMarked(item.ID)">
+                        <td>{{item.ID}}</td>
+                        <td>{{item.userName}}</td>
+                        <td>{{item.email}}</td>
+                    </tr>
+                </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+<add-user-modal [isModalShown]="showModal" [groupId]="groupId" (modalChange)="showModal=false" (refreshList)="refresh()"></add-user-modal>
