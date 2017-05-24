@@ -12,6 +12,9 @@ ProjectController.include({
     getRoleList: function (id) {
         return DBController.query('select * from PRJ_ROLE where PRJ_FK=?', [id]);
     },
+    getLastestVersion(projectId) {
+        return DBController.query('select CURRENT_D_VERSION as Development,CURRENT_VERSION as Production from PROJECT where ID=?', [projectId]);
+    },
     updateRole: function (roleId, value, __user) {
         let defer = q.defer();
         DBController.query('update PRJ_ROLE set POWER=? where ID=?', [value, roleId])

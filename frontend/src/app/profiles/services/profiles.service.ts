@@ -16,8 +16,9 @@ export class ProfilesService {
     private userInfo: any = null;
     constructor(private http: VcHttpService) { }
     public login(account: any): Observable<any> {
-        let params = account;
-        params.password = encrypt(params.password).toString();
+        let params = {};
+        $.extend(params, account);
+        params['password'] = encrypt(params['password']).toString();
         return this.http.post('login', params);
         // .subscribe(function (data) {
         //     if (data) {

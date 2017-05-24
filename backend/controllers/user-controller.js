@@ -45,8 +45,10 @@ UserController.include({
             if (data && data.length > 0) {
                 // console.log(data)
                 defer.resolve(data[0]);
+            } else {
+                defer.reject(false);
             }
-        }, err => {
+        }, (err) => {
             defer.reject(err);
             console.log(err);
         });

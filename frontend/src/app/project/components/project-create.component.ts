@@ -4,6 +4,7 @@ import { notEmpty } from '../../services/validator';
 import { ProjectUserDataService, ProjectDataService } from '../services/project-data.service';
 import { ParamsService } from '../../group/services/group-data.service';
 import { GroupUserDataService } from '../../group/services/group-data.service';
+import { VcGlobalComponentService } from '../../services/vc-global-component.service';
 
 @Component({
   selector: 'vc-project-create',
@@ -35,17 +36,11 @@ export class ProjectCreateComponent implements OnInit {
         private ProjectUserDataService: ProjectUserDataService,
         private ProjectDataService: ProjectDataService,
         private ParamsService: ParamsService,
-        private GroupUserDataService: GroupUserDataService) {
+        private GroupUserDataService: GroupUserDataService,
+        private VcGlobalComponentService: VcGlobalComponentService) {
     }
     ngOnInit(): void {
         this.buildForm();
-        let data = this.GroupUserDataService.userList;
-        for (let i = 0, item; (item = data[i]); i ++) {
-            this.userList.push({
-                id: item.ID,
-                text: item.userName
-            });
-        }
     }
     buildForm(): void {
         this.projectForm = this.fb.group({
@@ -81,7 +76,12 @@ export class ProjectCreateComponent implements OnInit {
         payload.groupId = this.ParamsService.groupId;
         this.ProjectDataService.addProject(payload)
         .subscribe(data => {
-            console.log(data);
+            if (data) {
+                let modal = this.VcGlobalComponentService.infoModal;
+                modal.modalTitle = 'Info';
+                modal.modalBody = 'Project "' + values.projectName + '" has been created.';
+                modal.showModal();
+            }
         });
       }
     }

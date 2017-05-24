@@ -32,7 +32,7 @@ app.all('*', function(req, res, next) {
 //     res.redirect('/');
 // })
 app.get('/', function(req, res){
-	res.sendFile( __dirname + "/frontend/src/index.html" );
+	res.sendFile( __dirname + '/..' + "/frontend/src/index.html" );
 });
 
 app.post('/login', function (req, res) {
@@ -55,7 +55,7 @@ app.post('/checkIdentity', _http(function (req, res, __user) {
     UserController.checkLogin(userInfo).then(function (user) {
         res.end(dataJson(user));
     }, function () {
-        console.log('user check fail')
+        console.log('user check failed')
         res.end(dataJson(null, 1, 'Current user is out of date, please sign in again.'));
     });
 }));
@@ -134,10 +134,19 @@ app.get('/project/list', _http(function (req, res) {
     ProjectController.getList().then(function (data) {
         res.end(dataJson(data));
     }, function (err) {
-        console.log('get project list fail')
+        console.log('get project list failed')
         res.end(dataJson(null, 1, 'info: ' + err));
     })
 }));
+app.get('/project/getlastestversion', function (req, res) {
+    let projectId = req.query.id;
+    ProjectController.getLastestVersion(projectId).then(function (data) {
+        res.end(dataJson(data[0]));
+    }, function (err) {
+        console.log('get lastest version failed')
+        res.end(dataJson(null, 1, 'info: ' + err));
+    })
+});
 app.post('/project/add', _http(function (req, res, __user) {
     let project = req.body;
     project.$hash = __user.$hash;
