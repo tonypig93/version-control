@@ -6,9 +6,14 @@ let UserController = require('./controllers/user-controller');
 let ProjectController = require('./controllers/project-controller');
 let DbController = require('./controllers/db-controller');
 let GroupController = require('./controllers/group-controller');
+let LogController = require('./controllers/log-controller');
+let MailController = require('./controllers/mail-controller');
+
 let httpService = require('./base/http-service');
 let q = require('q');
 
+const tonyId = 1013;
+const serverAddress = 'http://192.168.3.183:8000';
 let { dataJson: dataJson, http: _http, checkPower } = httpService;
 const projectPowerMap = {
     'version.patch': 1,
@@ -21,12 +26,11 @@ const projectPowerMap = {
 }
 app.use(bodyParser());
 app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
-    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    res.header("X-Powered-By",' 3.2.1')
-    if(req.method=="OPTIONS") res.send(200);/*让options请求快速返回*/
-    else  next();
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With');
+    res.header('Access-Control-Allow-Methods','PUT,POST,GET,DELETE,OPTIONS');
+    if(req.method=="OPTIONS") res.sendStatus(200);/*让options请求快速返回*/
+    else next();
 });
 // app.get('*', function (req, res) {
 //     res.redirect('/');
@@ -40,6 +44,7 @@ app.post('/login', function (req, res) {
     userInfo.IP = req.ip;
     UserController.login(userInfo).then(function (user) {
         if(user) {
+            LogController.login(user.ID, req.ip);
             res.end(dataJson(user));
         } else {
             res.end(dataJson(null, 1, 'login failed'));
@@ -87,7 +92,7 @@ app.post('/group/add', _http(function (req, res) {
     }, function (err) {
         console.log('add group fail')
         res.end(dataJson(null, 1, 'info: ' + err));
-    })
+    });
 }));
 app.get('/group/manage', _http(function (req, res) {
     let groudId = req.query.id;
@@ -115,15 +120,19 @@ app.get('/user/list', _http(function (req, res) {
 app.post('/user/add', _http(function (req, res) {
     let userInfo = req.body;
     UserController.add(userInfo).then(function (data) {
+        LogController.log(__user, 'create', `user: ${userInfo.userName}`, req.ip);
         res.end(dataJson(data));
     }, function (err) {
         console.log('add user failed')
         res.end(dataJson(null, 1, 'info: ' + err));
     })
+}, function(__user) {
+    return __user.ID === tonyId;
 }));
-app.post('/user/delete', _http(function (req, res) {
+app.post('/user/delete', _http(function (req, res, __user) {
     let userId = req.body.id;
     UserController.deleteUser(userId).then(function (data) {
+        LogController.log(__user.ID, 'delete', `user: ${userId}`, req.ip);
         res.end(dataJson(data));
     }, function (err) {
         console.log('delete user failed')
@@ -151,11 +160,14 @@ app.post('/project/add', _http(function (req, res, __user) {
     let project = req.body;
     project.$hash = __user.$hash;
     ProjectController.add(project).then(function (data) {
+        LogController.log(__user.ID, 'create', `project: ${project.projectName} in group: ${groupId}`, req.ip);
         res.end(dataJson(data));
     }, function (err) {
         console.log('add project failed')
         res.end(dataJson(null, 1, 'info: ' + err));
     })
+}, function(__user) {
+    return __user.ID === tonyId;
 }));
 app.get('/project/manage', _http(function (req, res) {
     let projectId = req.query.id;
@@ -191,53 +203,63 @@ app.get('/project/role/list', _http(function (req, res) {
 app.post('/project/role/update', _http(function (req, res, __user) {
     let {roleId, value} = req.body;
     ProjectController.updateRole(roleId, value, __user).then(function (data) {
+        LogController.log(__user.ID, 'update', `role: ${roleId} set power value: ${value}`, req.ip);
         res.end(dataJson(data));
     }, function (err) {
         console.log('update project role failed')
         res.end(dataJson(null, 1, 'info: ' + err));
-    })
+    });
 }, projectPowerMap['role']));
-app.post('/project/role/delete', _http(function (req, res) {
+app.post('/project/role/delete', _http(function (req, res, __user) {
     let {roleId, projectId} = req.body;
     ProjectController.deleteRole(roleId, projectId).then(function (data) {
+        LogController.log(__user.ID, 'delete', `role: ${roleId} in project: ${projectId}`, req.ip);
         res.end(dataJson(data));
     }, function (err) {
         console.log('delete project failed')
         res.end(dataJson(null, 1, 'info: ' + err));
-    })
+    });
 }, projectPowerMap['role']));
-app.post('/project/role/add', _http(function (req, res) {
+app.post('/project/role/add', _http(function (req, res, __user) {
     let {roleName, value, projectId} = req.body;
     ProjectController.addRole(roleName, value, projectId).then(function (data) {
+        LogController.log(__user.ID, 'add', `role: ${roleName} in project: ${projectId}`, req.ip);
         res.end(dataJson(data));
     }, function (err) {
         console.log('add project role failed')
         res.end(dataJson(null, 1, 'info: ' + err));
-    })
+    });
 }));
-app.post('/project/user/add', _http(function (req, res) {
+app.post('/project/user/add', _http(function (req, res, __user) {
     let userInfo = req.body;
-    ProjectController.addUser(userInfo).then(function (data) {
+    ProjectController.addUser(userInfo, req.ip).then(function (data) {
+        LogController.log(__user.ID, 'add', `user: ${userInfo.user}`, req.ip);
         res.end(dataJson(data));
     }, function (err) {
         console.log('add user to project failed')
         res.end(dataJson(null, 1, 'info: ' + err));
-    })
+    });
 }, projectPowerMap['member']));
-app.post('/project/user/delete', _http(function (req, res) {
+app.post('/project/user/delete', _http(function (req, res, __user) {
     let userId = req.body.userId,
         projectId = req.body.projectId;
-    ProjectController.deleteUser(userId, projectId).then(function (data) {
+    ProjectController.deleteUser(userId, projectId, req.ip).then(function (data) {
+        LogController.log(__user.ID, 'delete', `user: ${userId}`, req.ip);
         res.end(dataJson(data));
     }, function (err) {
         console.log('delete user from project failed')
         res.end(dataJson(null, 1, 'info: ' + err));
-    })
+    });
 }, projectPowerMap['member']));
 app.post('/project/version/update', _http(function (req, res, __user) {
     let {major, minor, patch, projectId, repoCode, log, ID, release, type} = req.body;
-    let userID = __user.ID;
-    ProjectController.updateVersion(major, minor, patch, projectId, repoCode, log, userID, ID, release, type).then(function (data) {
+    ProjectController.updateVersion(major, minor, patch, projectId, repoCode, log, __user, ID, release, type).then(function (data) {
+        LogController.log(__user.ID, (ID ? 'modify' : 'update'), `version: ${major}.${minor}.${patch}`, req.ip);
+        if (release) {
+            setTimeout(function () {
+                MailController.sendVersionAlert(projectId, __user);
+            }, 0);
+        }
         res.end(dataJson(data));
     }, function (err) {
         console.log('update project version failed')
@@ -265,7 +287,7 @@ app.post('/project/version/update', _http(function (req, res, __user) {
         }
         let flag = true;
         updateType.forEach(function(item) {
-            flag = (flag && checkPower(projectPowerMap[item], __user.$hash));
+            flag = (flag && checkPower(projectPowerMap[item], __user));
         });
         if (flag) {
             defer.resolve(true);

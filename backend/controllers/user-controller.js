@@ -88,7 +88,7 @@ UserController.include({
             }
 
         } else {
-            defer.reject(false);
+            defer.reject('User is out of date.');
         }
         
         return defer.promise;
@@ -112,7 +112,7 @@ UserController.include({
                 defer.reject(err);
             });
         } else {
-            defer.reject(false);
+            defer.reject('User is out of date.');
         }
         
         return defer.promise;

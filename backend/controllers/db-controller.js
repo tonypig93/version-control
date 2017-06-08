@@ -29,8 +29,8 @@ DBController.include({
             connection.query(sql, params,function(err, rows, fields) {
                 if(err) {
                     defer.reject(err);
+                    console.log(err);
                 }
-                console.log('db query successed');
                 defer.resolve(rows);
                 connection.release();
             });

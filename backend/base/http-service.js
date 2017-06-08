@@ -24,12 +24,12 @@ function http(response, powerGuard) {
                         response.call(null, req, res, __user);
                     }
                 }, err => {
-                    res.end(dataJson(null, 1, 'Unauthorized: access permission required!(async)'));
+                    res.end(dataJson(null, 1, 'Unauthorized: access permission required!'));
                 });
                 return;
             }
         } else {
-            pass = checkPower(powerGuard, $hash);
+            pass = checkPower(powerGuard, __user);
         }
         if (pass) {
             response.call(null, req, res, __user);
@@ -38,10 +38,8 @@ function http(response, powerGuard) {
         }
     }
 }
-function checkPower(powerGuard, $hash) {
+function checkPower(powerGuard, __user) {
     if (powerGuard) {
-        let userId = UserController.getUserIDFromHash($hash);
-        let __user = UserController.loginUser.findByAttr('ID', userId);
         return (__user) && (__user.projectAccess) && ((__user.projectAccess.power & powerGuard) === powerGuard);
     }
     return true;

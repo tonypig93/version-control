@@ -57,7 +57,7 @@ ProjectController.include({
         });
         return defer.promise;
     },
-    add: function ({projectName, description, visibility,groupId, $hash}) {
+    add: function ({projectName, description, visibility, groupId, $hash}) {
         let userId = UserController.getUserIDFromHash($hash);
         return DBController.insert('insert into project (PRJ_NAME,GROUP_FK,VISIBILITY,DESCRIPTION,USER_FK) values (?,?,?,?,?)',
         [projectName, groupId, visibility, description,userId]);
@@ -86,7 +86,7 @@ ProjectController.include({
         });
         return defer.promise;
     },
-    updateVersion: function (major, minor, patch, projectId, repoCode, log, userId, ID, release, type) {
+    updateVersion: function (major, minor, patch, projectId, repoCode, log, __user, ID, release, type) {
         let defer = q.defer();
         let sql = '';
         let params;
@@ -100,7 +100,7 @@ ProjectController.include({
             sql = `insert into PRJ_VERSION 
             (PRJ_FK,V_MAJOR,V_MINOR,V_PATCH,USER_FK,REPO_CODE,LOG_BUG,LOG_GENERAL,LOG_FEATURE,STATUS,TYPE) 
             values (?,?,?,?,?,?,?,?,?,?,?)`;
-            params = [projectId, major, minor, patch, userId, repoCode, log.bug, log.general, log.feature, release, type];
+            params = [projectId, major, minor, patch, __user.ID, repoCode, log.bug, log.general, log.feature, release, type];
         }
         DBController.insert(sql, params)
         .then((res) => {
